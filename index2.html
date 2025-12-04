@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Cocina | Rápido y Sabroso</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6b35;
+            --secondary-color: #f4a261;
+            --dark-color: #2a2a2a;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f5f5f5;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            padding: 15px 0;
+            margin-bottom: 30px;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0;
+            color: var(--dark-color);
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        .kitchen-info {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .current-time {
+            font-size: 1.1rem;
+            font-weight: 500;
+            background-color: var(--light-color);
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+
+        .chef-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .chef-name i {
+            color: var(--primary-color);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .pending .stat-icon {
+            background-color: var(--warning-color);
+        }
+
+        .preparing .stat-icon {
+            background-color: var(--info-color);
+        }
+
+        .ready .stat-icon {
+            background-color: var(--success-color);
+        }
+
+        .delivered .stat-icon {
+            background-color: var(--gray-color);
+        }
+
+        .stat-info h3 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: var(--gray-color);
+            font-size: 1rem;
+        }
+
+        /* Filtros */
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background-color: var(--light-color);
+            border: 2px solid #ddd;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-color);
+        }
+
+        /* Pedidos */
+        .orders-section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title i {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .refresh-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .refresh-btn:hover {
+            background-color: #e55a2b;
+        }
+
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .order-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+            border-left: 5px solid var(--warning-color);
+        }
+
+        .order-card.preparing {
+            border-left-color: var(--info-color);
+        }
+
+        .order-card.ready {
+            border-left-color: var(--success-color);
+        }
+
+        .order-card.delivered {
+            border-left-color: var(--gray-color);
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--light-color);
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-id {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--dark-color);
+        }
+
+        .order-time {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+        }
+
+        .order-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #b08c00;
+        }
+
+        .status-preparing {
+            background-color: rgba(23, 162, 184, 0.2);
+            color: #0c5460;
+        }
+
+        .status-ready {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #155724;
+        }
+
+        .status-delivered {
+            background-color: rgba(108, 117, 125, 0.2);
+            color: #383d41;
+        }
+
+        .order-details {
+            padding: 20px;
+        }
+
+        .order-items {
+            margin-bottom: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .item-quantity {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .order-actions {
+            padding: 0 20px 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .start-btn {
+            background-color: var(--info-color);
+            color: white;
+        }
+
+        .start-btn:hover {
+            background-color: #138496;
+        }
+
+        .complete-btn {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .complete-btn:hover {
+            background-color: #218838;
+        }
+
+        .deliver-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .deliver-btn:hover {
+            background-color: #e55a2b;
+        }
+
+        /* Notificaciones */
+        .notification-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--danger-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Audio player oculto para notificaciones */
+        #notification-sound {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .filters {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .kitchen-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .orders-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .order-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .filter-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .filter-btn {
+                flex: 1;
+                text-align: center;
+                min-width: 120px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Audio para notificaciones -->
+    <audio id="notification-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-fast-double-click-on-mouse-275.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Notificación de nuevo pedido -->
+    <div class="notification-badge" id="notification-badge" style="display: none;">
+        <i class="fas fa-bell"></i>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <div>
+                    <h1>Sistema de <span>Cocina</span></h1>
+                    <p>Rápido y Sabroso - Panel de Control</p>
+                </div>
+            </div>
+            
+            <div class="kitchen-info">
+                <div class="current-time" id="current-time">
+                    <!-- La hora se actualizará con JavaScript -->
+                </div>
+                <div class="chef-name">
+                    <i class="fas fa-user-chef"></i>
+                    <span id="chef-name">Chef Principal</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard de estadísticas -->
+        <div class="dashboard">
+            <div class="stat-card pending">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="pending-count">0</h3>
+                    <p>Pendientes</p>
+                </div>
+            </div>
+            
+            <div class="stat-card preparing">
+                <div class="stat-icon">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="preparing-count">0</h3>
+                    <p>En Preparación</p>
+                </div>
+            </div>
+            
+            <div class="stat-card ready">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="ready-count">0</h3>
+                    <p>Listos para Entregar</p>
+                </div>
+            </div>
+            
+            <div class="stat-card delivered">
+                <div class="stat-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="delivered-count">0</h3>
+                    <p>Entregados Hoy</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros y búsqueda -->
+        <div class="filters">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Todos los Pedidos</button>
+                <button class="filter-btn" data-filter="pending">Pendientes</button>
+                <button class="filter-btn" data-filter="preparing">En Preparación</button>
+                <button class="filter-btn" data-filter="ready">Listos</button>
+            </div>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="Buscar por número de pedido...">
+            </div>
+        </div>
+
+        <!-- Sección de pedidos pendientes -->
+        <div class="orders-section">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h2>Pedidos Activos</h2>
+                </div>
+                <button class="refresh-btn" id="refresh-btn">
+                    <i class="fas fa-sync-alt"></i>
+                    Actualizar Pedidos
+                </button>
+            </div>
+            
+            <div class="orders-grid" id="orders-container">
+                <!-- Los pedidos se cargarán con JavaScript -->
+                <div class="no-orders" style="grid-column: 1 / -1; text-align: center; padding: 50px; color: var(--gray-color);">
+                    <i class="fas fa-clipboard-check" style="font-size: 4rem; margin-bottom: 20px;"></i>
+                    <h3>No hay pedidos pendientes</h3>
+                    <p>Los nuevos pedidos aparecerán aquí automáticamente</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de pedidos recientes entregados -->
+        <div class="orders-section">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-history"></i>
+                    <h2>Pedidos Recientes</h2>
+                </div>
+            </div>
+            
+            <div class="orders-grid" id="recent-orders-container">
+                <!-- Los pedidos recientes se cargarán con JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de ejemplo para pedidos
+        let orders = [
+            {
+                id: "ORD-1001",
+                customer: "Juan Pérez",
+                status: "pending",
+                timestamp: "10:25 AM",
+                items: [
+                    { name: "Hamburguesa Clásica", quantity: 2, price: 8.50 },
+                    { name: "Papas Fritas", quantity: 2, price: 3.00 },
+                    { name: "Refresco", quantity: 2, price: 2.50 }
+                ],
+                notes: "Sin cebolla en una hamburguesa",
+                table: "Mesa 5"
+            },
+            {
+                id: "ORD-1002",
+                customer: "María García",
+                status: "preparing",
+                timestamp: "10:30 AM",
+                items: [
+                    { name: "Pizza Pepperoni", quantity: 1, price: 13.50 },
+                    { name: "Ensalada César", quantity: 1, price: 6.00 },
+                    { name: "Agua Mineral", quantity: 1, price: 2.00 }
+                ],
+                notes: "",
+                table: "Para llevar"
+            },
+            {
+                id: "ORD-1003",
+                customer: "Carlos López",
+                status: "ready",
+                timestamp: "10:15 AM",
+                items: [
+                    { name: "Sándwich de Pollo", quantity: 1, price: 7.50 },
+                    { name: "Sopa del Día", quantity: 1, price: 4.50 }
+                ],
+                notes: "Sándwich bien tostado",
+                table: "Mesa 3"
+            },
+            {
+                id: "ORD-1004",
+                customer: "Ana Rodríguez",
+                status: "pending",
+                timestamp: "10:40 AM",
+                items: [
+                    { name: "Hamburguesa BBQ", quantity: 1, price: 9.50 },
+                    { name: "Aros de Cebolla", quantity: 1, price: 4.00 },
+                    { name: "Cerveza Artesanal", quantity: 1, price: 4.50 }
+                ],
+                notes: "",
+                table: "Barra"
+            },
+            {
+                id: "ORD-1005",
+                customer: "Pedro Sánchez",
+                status: "delivered",
+                timestamp: "10:00 AM",
+                items: [
+                    { name: "Pizza Margarita", quantity: 1, price: 12.00 },
+                    { name: "Helado", quantity: 2, price: 3.50 }
+                ],
+                notes: "Pizza bien hecha",
+                table: "Mesa 2"
+            }
+        ];
+
+        // Elementos del DOM
+        const ordersContainer = document.getElementById('orders-container');
+        const recentOrdersContainer = document.getElementById('recent-orders-container');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const searchInput = document.getElementById('search-input');
+        const refreshBtn = document.getElementById('refresh-btn');
+        const currentTimeElement = document.getElementById('current-time');
+        const notificationBadge = document.getElementById('notification-badge');
+        const notificationSound = document.getElementById('notification-sound');
+        
+        // Contadores del dashboard
+        const pendingCount = document.getElementById('pending-count');
+        const preparingCount = document.getElementById('preparing-count');
+        const readyCount = document.getElementById('ready-count');
+        const deliveredCount = document.getElementById('delivered-count');
+        
+        // Estado
+        let currentFilter = 'all';
+        let searchQuery = '';
+        let newOrderNotification = false;
+
+        // Inicializar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTime();
+            setInterval(updateTime, 60000); // Actualizar cada minuto
+            
+            renderOrders();
+            updateDashboard();
+            setupEventListeners();
+            
+            // Simular nuevo pedido cada 2 minutos (para demo)
+            setInterval(simulateNewOrder, 120000);
+            
+            // Pedidos recientes (entregados)
+            renderRecentOrders();
+        });
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Filtros
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remover clase active de todos los botones
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Agregar clase active al botón clickeado
+                    button.classList.add('active');
+                    // Actualizar filtro
+                    currentFilter = button.getAttribute('data-filter');
+                    renderOrders();
+                });
+            });
+            
+            // Búsqueda
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase();
+                renderOrders();
+            });
+            
+            // Botón de actualizar
+            refreshBtn.addEventListener('click', () => {
+                refreshOrders();
+            });
+            
+            // Notificación
+            notificationBadge.addEventListener('click', () => {
+                hideNotification();
+                renderOrders();
+            });
+        }
+
+        // Actualizar la hora actual
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-ES', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            currentTimeElement.textContent = timeString;
+        }
+
+        // Renderizar pedidos según filtro
+        function renderOrders() {
+            // Limpiar contenedor
+            ordersContainer.innerHTML = '';
+            
+            // Filtrar pedidos
+            let filteredOrders = orders;
+            
+            // Aplicar filtro de estado
+            if (currentFilter !== 'all') {
+                filteredOrders = filteredOrders.filter(order => order.status === currentFilter);
+            }
+            
+            // Aplicar búsqueda
+            if (searchQuery) {
+                filteredOrders = filteredOrders.filter(order => 
+                    order.id.toLowerCase().includes(searchQuery) || 
+                    order.customer.toLowerCase().includes(searchQuery)
+                );
+            }
+            
+            // Mostrar mensaje si no hay pedidos
+            if (filteredOrders.length === 0) {
+                const noOrdersElement = document.createElement('div');
+                noOrdersElement.className = 'no-orders';
+                noOrdersElement.innerHTML = `
+                    <i class="fas fa-clipboard-check" style="font-size: 4rem; margin-bottom: 20px;"></i>
+                    <h3>No hay pedidos</h3>
+                    <p>${searchQuery ? 'No se encontraron resultados para tu búsqueda' : 'No hay pedidos con este filtro'}</p>
+                `;
+                ordersContainer.appendChild(noOrdersElement);
+                return;
+            }
+            
+            // Crear tarjetas de pedidos
+            filteredOrders.forEach(order => {
+                // No mostrar pedidos entregados en la sección principal
+                if (order.status === 'delivered') return;
+                
+                const orderCard = document.createElement('div');
+                orderCard.className = `order-card ${order.status}`;
+                
+                // Calcular total
+                const total = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                
+                // Generar HTML de items
+                const itemsHTML = order.items.map(item => `
+                    <div class="order-item">
+                        <div class="item-name">
+                            <div class="item-quantity">${item.quantity}</div>
+                            <div>${item.name}</div>
+                        </div>
+                        <div class="item-price">€${(item.price * item.quantity).toFixed(2)}</div>
+                    </div>
+                `).join('');
+                
+                // Determinar botones según estado
+                let actionButtons = '';
+                if (order.status === 'pending') {
+                    actionButtons = `
+                        <button class="action-btn start-btn" data-id="${order.id}">
+                            <i class="fas fa-play"></i>
+                            Iniciar Preparación
+                        </button>
+                    `;
+                } else if (order.status === 'preparing') {
+                    actionButtons = `
+                        <button class="action-btn complete-btn" data-id="${order.id}">
+                            <i class="fas fa-check"></i>
+                            Marcar como Listo
+                        </button>
+                    `;
+                } else if (order.status === 'ready') {
+                    actionButtons = `
+                        <button class="action-btn deliver-btn" data-id="${order.id}">
+                            <i class="fas fa-truck"></i>
+                            Entregado al Cliente
+                        </button>
+                    `;
+                }
+                
+                orderCard.innerHTML = `
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">${order.id}</div>
+                            <div class="order-time">${order.timestamp} - ${order.table}</div>
+                        </div>
+                        <div class="order-status status-${order.status}">
+                            ${getStatusText(order.status)}
+                        </div>
+                    </div>
+                    
+                    <div class="order-details">
+                        <div style="margin-bottom: 15px; font-weight: 500;">
+                            <i class="fas fa-user"></i> ${order.customer}
+                        </div>
+                        
+                        ${order.notes ? `
+                            <div style="margin-bottom: 15px; padding: 10px; background-color: #fff8e1; border-radius: 5px; font-size: 0.9rem;">
+                                <i class="fas fa-sticky-note"></i> <strong>Notas:</strong> ${order.notes}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="order-items">
+                            ${itemsHTML}
+                        </div>
+                        
+                        <div class="order-total">
+                            <span>Total:</span>
+                            <span>€${total.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="order-actions">
+                        ${actionButtons}
+                    </div>
+                `;
+                
+                ordersContainer.appendChild(orderCard);
+            });
+            
+            // Agregar event listeners a los botones de acción
+            document.querySelectorAll('.start-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const orderId = e.target.closest('.start-btn').getAttribute('data-id');
+                    updateOrderStatus(orderId, 'preparing');
+                });
+            });
+            
+            document.querySelectorAll('.complete-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const orderId = e.target.closest('.complete-btn').getAttribute('data-id');
+                    updateOrderStatus(orderId, 'ready');
+                });
+            });
+            
+            document.querySelectorAll('.deliver-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const orderId = e.target.closest('.deliver-btn').getAttribute('data-id');
+                    updateOrderStatus(orderId, 'delivered');
+                });
+            });
+        }
+
+        // Renderizar pedidos recientes (entregados)
+        function renderRecentOrders() {
+            // Limpiar contenedor
+            recentOrdersContainer.innerHTML = '';
+            
+            // Filtrar pedidos entregados
+            const deliveredOrders = orders.filter(order => order.status === 'delivered');
+            
+            // Mostrar máximo 3 pedidos recientes
+            const recentOrders = deliveredOrders.slice(-3);
+            
+            if (recentOrders.length === 0) {
+                const noOrdersElement = document.createElement('div');
+                noOrdersElement.className = 'no-orders';
+                noOrdersElement.innerHTML = `
+                    <i class="fas fa-history" style="font-size: 4rem; margin-bottom: 20px;"></i>
+                    <h3>No hay pedidos recientes</h3>
+                    <p>Los pedidos entregados aparecerán aquí</p>
+                `;
+                recentOrdersContainer.appendChild(noOrdersElement);
+                return;
+            }
+            
+            // Crear tarjetas de pedidos recientes
+            recentOrders.forEach(order => {
+                const orderCard = document.createElement('div');
+                orderCard.className = `order-card ${order.status}`;
+                
+                // Calcular total
+                const total = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                
+                // Generar HTML de items
+                const itemsHTML = order.items.map(item => `
+                    <div class="order-item">
+                        <div class="item-name">
+                            <div class="item-quantity">${item.quantity}</div>
+                            <div>${item.name}</div>
+                        </div>
+                        <div class="item-price">€${(item.price * item.quantity).toFixed(2)}</div>
+                    </div>
+                `).join('');
+                
+                orderCard.innerHTML = `
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">${order.id}</div>
+                            <div class="order-time">${order.timestamp} - ${order.table}</div>
+                        </div>
+                        <div class="order-status status-${order.status}">
+                            ${getStatusText(order.status)}
+                        </div>
+                    </div>
+                    
+                    <div class="order-details">
+                        <div style="margin-bottom: 15px; font-weight: 500;">
+                            <i class="fas fa-user"></i> ${order.customer}
+                        </div>
+                        
+                        <div class="order-items">
+                            ${itemsHTML}
+                        </div>
+                        
+                        <div class="order-total">
+                            <span>Total:</span>
+                            <span>€${total.toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+                
+                recentOrdersContainer.appendChild(orderCard);
+            });
+        }
+
+        // Actualizar estado del pedido
+        function updateOrderStatus(orderId, newStatus) {
+            const order = orders.find(order => order.id === orderId);
+            if (order) {
+                order.status = newStatus;
+                
+                // Si se marca como entregado, actualizar hora
+                if (newStatus === 'delivered') {
+                    const now = new Date();
+                    order.timestamp = now.toLocaleTimeString('es-ES', { 
+                        hour: '2-digit', 
+                        minute: '2-digit',
+                        hour12: false 
+                    }) + " (Entregado)";
+                }
+                
+                renderOrders();
+                renderRecentOrders();
+                updateDashboard();
+                
+                // Mostrar confirmación
+                showStatusChangeNotification(orderId, newStatus);
+            }
+        }
+
+        // Actualizar dashboard con estadísticas
+        function updateDashboard() {
+            const pending = orders.filter(order => order.status === 'pending').length;
+            const preparing = orders.filter(order => order.status === 'preparing').length;
+            const ready = orders.filter(order => order.status === 'ready').length;
+            const delivered = orders.filter(order => order.status === 'delivered').length;
+            
+            pendingCount.textContent = pending;
+            preparingCount.textContent = preparing;
+            readyCount.textContent = ready;
+            deliveredCount.textContent = delivered;
+        }
+
+        // Obtener texto del estado
+        function getStatusText(status) {
+            switch(status) {
+                case 'pending': return 'Pendiente';
+                case 'preparing': return 'En Preparación';
+                case 'ready': return 'Listo';
+                case 'delivered': return 'Entregado';
+                default: return 'Desconocido';
+            }
+        }
+
+        // Simular nuevo pedido (para demo)
+        function simulateNewOrder() {
+            // Generar ID único
+            const lastOrderId = parseInt(orders[orders.length - 1]?.id?.split('-')[1] || 1000);
+            const newId = `ORD-${lastOrderId + 1}`;
+            
+            // Clientes aleatorios
+            const customers = ["Laura Martínez", "David Gómez", "Sofía Ruiz", "Javier Díaz", "Elena Torres"];
+            const customer = customers[Math.floor(Math.random() * customers.length)];
+            
+            // Mesas aleatorias
+            const tables = ["Mesa 1", "Mesa 4", "Mesa 6", "Barra", "Para llevar"];
+            const table = tables[Math.floor(Math.random() * tables.length)];
+            
+            // Hora actual
+            const now = new Date();
+            const timestamp = now.toLocaleTimeString('es-ES', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            
+            // Items aleatorios
+            const menuItems = [
+                { name: "Hamburguesa Clásica", price: 8.50 },
+                { name: "Hamburguesa BBQ", price: 9.50 },
+                { name: "Pizza Margarita", price: 12.00 },
+                { name: "Pizza Pepperoni", price: 13.50 },
+                { name: "Sándwich de Pollo", price: 7.50 },
+                { name: "Papas Fritas", price: 3.00 },
+                { name: "Aros de Cebolla", price: 4.00 },
+                { name: "Ensalada César", price: 6.00 },
+                { name: "Refresco", price: 2.50 },
+                { name: "Cerveza Artesanal", price: 4.50 }
+            ];
+            
+            // Seleccionar 2-4 items aleatorios
+            const numItems = Math.floor(Math.random() * 3) + 2;
+            const selectedItems = [];
+            for (let i = 0; i < numItems; i++) {
+                const randomItem = menuItems[Math.floor(Math.random() * menuItems.length)];
+                const existingItem = selectedItems.find(item => item.name === randomItem.name);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    selectedItems.push({
+                        ...randomItem,
+                        quantity: 1
+                    });
+                }
+            }
+            
+            // Crear nuevo pedido
+            const newOrder = {
+                id: newId,
+                customer: customer,
+                status: "pending",
+                timestamp: timestamp,
+                items: selectedItems,
+                notes: Math.random() > 0.7 ? "Sin picante, por favor" : "",
+                table: table
+            };
+            
+            // Agregar a la lista de pedidos
+            orders.push(newOrder);
+            
+            // Mostrar notificación
+            showNewOrderNotification(newOrder);
+            
+            // Actualizar la vista si estamos viendo pedidos pendientes
+            if (currentFilter === 'all' || currentFilter === 'pending') {
+                renderOrders();
+                updateDashboard();
+            }
+        }
+
+        // Mostrar notificación de nuevo pedido
+        function showNewOrderNotification(order) {
+            // Mostrar badge
+            notificationBadge.style.display = 'flex';
+            newOrderNotification = true;
+            
+            // Reproducir sonido
+            notificationSound.currentTime = 0;
+            notificationSound.play().catch(e => console.log("No se pudo reproducir el sonido:", e));
+            
+            // Mostrar notificación en pantalla
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background-color: white;
+                color: var(--dark-color);
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: var(--shadow);
+                z-index: 1000;
+                width: 300px;
+                animation: slideInRight 0.5s ease-out;
+                border-left: 5px solid var(--warning-color);
+            `;
+            
+            // Calcular total
+            const total = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <i class="fas fa-bell" style="color: var(--warning-color); font-size: 1.2rem;"></i>
+                    <h4 style="margin: 0;">Nuevo Pedido!</h4>
+                </div>
+                <p style="margin-bottom: 5px;"><strong>${order.id}</strong> - ${order.customer}</p>
+                <p style="margin-bottom: 10px; font-size: 0.9rem;">${order.table} - ${order.items.length} items</p>
+                <p style="font-weight: 600;">Total: €${total.toFixed(2)}</p>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remover notificación después de 5 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.5s ease-out';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 500);
+            }, 5000);
+            
+            // Agregar animaciones CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOutRight {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Mostrar notificación de cambio de estado
+        function showStatusChangeNotification(orderId, newStatus) {
+            const order = orders.find(order => order.id === orderId);
+            if (!order) return;
+            
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background-color: white;
+                color: var(--dark-color);
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: var(--shadow);
+                z-index: 1000;
+                width: 300px;
+                animation: slideInRight 0.5s ease-out;
+                border-left: 5px solid ${getStatusColor(newStatus)};
+            `;
+            
+            const statusText = getStatusText(newStatus);
+            const icon = newStatus === 'preparing' ? 'fa-play' : 
+                         newStatus === 'ready' ? 'fa-check' : 
+                         newStatus === 'delivered' ? 'fa-truck' : 'fa-info';
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <i class="fas ${icon}" style="color: ${getStatusColor(newStatus)}; font-size: 1.2rem;"></i>
+                    <h4 style="margin: 0;">Pedido Actualizado</h4>
+                </div>
+                <p style="margin-bottom: 5px;"><strong>${order.id}</strong></p>
+                <p style="margin-bottom: 10px;">Estado cambiado a: <strong>${statusText}</strong></p>
+                <p style="font-size: 0.9rem; color: ${getStatusColor(newStatus)};">
+                    <i class="fas fa-check"></i> Actualizado correctamente
+                </p>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remover notificación después de 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.5s ease-out';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 500);
+            }, 3000);
+        }
+
+        // Obtener color según estado
+        function getStatusColor(status) {
+            switch(status) {
+                case 'pending': return 'var(--warning-color)';
+                case 'preparing': return 'var(--info-color)';
+                case 'ready': return 'var(--success-color)';
+                case 'delivered': return 'var(--gray-color)';
+                default: return 'var(--dark-color)';
+            }
+        }
+
+        // Ocultar notificación de nuevo pedido
+        function hideNotification() {
+            notificationBadge.style.display = 'none';
+            newOrderNotification = false;
+        }
+
+        // Refrescar pedidos (simulación de actualización desde servidor)
+        function refreshOrders() {
+            // Simular una pequeña animación en el botón
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando...';
+            
+            // Después de 1 segundo, restaurar el botón
+            setTimeout(() => {
+                refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Actualizar Pedidos';
+                
+                // Mostrar mensaje de éxito
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background-color: var(--success-color);
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 5px;
+                    box-shadow: var(--shadow);
+                    z-index: 1000;
+                    animation: slideInRight 0.5s ease-out;
+                `;
+                
+                notification.innerHTML = `
+                    <i class="fas fa-check-circle"></i> Pedidos actualizados correctamente
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Remover notificación después de 3 segundos
+                setTimeout(() => {
+                    notification.style.animation = 'slideOutRight 0.5s ease-out';
+                    setTimeout(() => {
+                        if (document.body.contains(notification)) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 500);
+                }, 3000);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
