@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Caja | Rápido y Sabroso</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --gray-color: #7f8c8d;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --border-radius: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f5f7fa;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #34495e);
+            color: white;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            color: var(--secondary-color);
+            font-size: 2.5rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0;
+            color: white;
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        .cashier-info {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .cashier-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--success-color);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .cashier-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .cashier-name i {
+            color: var(--secondary-color);
+        }
+
+        /* Layout principal */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+
+        /* Panel izquierdo - Productos y venta */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Panel derecho - Resumen de venta */
+        .right-panel {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 30px;
+        }
+
+        /* Categorías de productos */
+        .categories {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+        }
+
+        .categories-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .category-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .category-btn {
+            background-color: var(--light-color);
+            border: 2px solid #ddd;
+            padding: 15px 10px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-btn i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .category-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .category-btn.active i {
+            color: white;
+        }
+
+        /* Productos */
+        .products {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            flex-grow: 1;
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .product-card {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--secondary-color);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 120px;
+            background-color: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: var(--success-color);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .add-product-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .add-product-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Carrito de venta */
+        .sale-summary {
+            margin-bottom: 30px;
+        }
+
+        .sale-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-color);
+        }
+
+        .sale-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .sale-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .item-quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--light-color);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .item-quantity {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .item-name {
+            font-weight: 500;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .item-total {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: var(--danger-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* Totales */
+        .totals {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .total-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--primary-color);
+        }
+
+        /* Métodos de pago */
+        .payment-methods {
+            margin-bottom: 25px;
+        }
+
+        .payment-methods h3 {
+            margin-bottom: 15px;
+        }
+
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .payment-btn {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            background-color: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .payment-btn i {
+            font-size: 1.3rem;
+        }
+
+        .payment-btn.active {
+            border-color: var(--success-color);
+            background-color: rgba(39, 174, 96, 0.1);
+        }
+
+        .payment-btn.cash i { color: var(--success-color); }
+        .payment-btn.card i { color: var(--secondary-color); }
+        .payment-btn.transfer i { color: var(--primary-color); }
+
+        /* Botones de acción */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .action-btn {
+            padding: 15px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .complete-sale-btn {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .complete-sale-btn:hover {
+            background-color: #219653;
+        }
+
+        .cancel-sale-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .cancel-sale-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Ventana modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .modal-btn.confirm {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .modal-btn.cancel {
+            background-color: var(--gray-color);
+            color: white;
+        }
+
+        /* Dashboard de caja */
+        .cash-dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .cash-stat-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s;
+        }
+
+        .cash-stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .cash-stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .today-sales .cash-stat-icon { background-color: var(--success-color); }
+        .total-cash .cash-stat-icon { background-color: var(--secondary-color); }
+        .credit-sales .cash-stat-icon { background-color: var(--warning-color); }
+        .transactions .cash-stat-icon { background-color: var(--primary-color); }
+
+        .cash-stat-info h3 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .cash-stat-info p {
+            color: var(--gray-color);
+            font-size: 1rem;
+        }
+
+        /* Transacciones recientes */
+        .recent-transactions {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        .transactions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transactions-table th {
+            background-color: var(--light-color);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark-color);
+            border-bottom: 2px solid #ddd;
+        }
+
+        .transactions-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .transaction-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-completed {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: var(--success-color);
+        }
+
+        .status-pending {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning-color);
+        }
+
+        .status-cancelled {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger-color);
+        }
+
+        /* Botones de caja */
+        .cash-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .cash-action-btn {
+            padding: 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            background-color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .cash-action-btn i {
+            font-size: 2.5rem;
+        }
+
+        .open-cash-btn {
+            color: var(--success-color);
+            border: 2px solid var(--success-color);
+        }
+
+        .close-cash-btn {
+            color: var(--danger-color);
+            border: 2px solid var(--danger-color);
+        }
+
+        .reports-btn {
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .void-sale-btn {
+            color: var(--warning-color);
+            border: 2px solid var(--warning-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .right-panel {
+                position: static;
+            }
+            
+            .cash-dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .cashier-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .category-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .payment-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .cash-dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .cash-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .category-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .transactions-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal para completar venta -->
+    <div class="modal" id="payment-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Completar Venta</h3>
+                <button class="close-modal" id="close-payment-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="sale-summary-modal">
+                <div class="total-row">
+                    <span>Total a Pagar:</span>
+                    <span id="modal-total-amount">€0.00</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="payment-amount">Cantidad Recibida</label>
+                    <input type="number" id="payment-amount" step="0.01" placeholder="0.00" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="change-amount">Cambio</label>
+                    <input type="number" id="change-amount" step="0.01" placeholder="0.00" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-name">Nombre del Cliente (Opcional)</label>
+                    <input type="text" id="customer-name" placeholder="Nombre del cliente">
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" id="cancel-payment">
+                    Cancelar
+                </button>
+                <button class="modal-btn confirm" id="confirm-payment">
+                    Confirmar Pago
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para abrir/cerrar caja -->
+    <div class="modal" id="cash-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="cash-modal-title">Abrir Caja</h3>
+                <button class="close-modal" id="close-cash-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="cash-modal-content">
+                <!-- Contenido dinámico según si es abrir o cerrar caja -->
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" id="cancel-cash-operation">
+                    Cancelar
+                </button>
+                <button class="modal-btn confirm" id="confirm-cash-operation">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-cash-register"></i>
+                <div>
+                    <h1>Sistema de <span>Caja</span></h1>
+                    <p>Rápido y Sabroso - Gestión de Ventas</p>
+                </div>
+            </div>
+            
+            <div class="cashier-info">
+                <div class="cashier-status">
+                    <div class="status-indicator"></div>
+                    <span id="cash-status">Caja Abierta</span>
+                </div>
+                <div class="cashier-name">
+                    <i class="fas fa-user-tie"></i>
+                    <span id="cashier-name">Cajero Principal</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard de caja -->
+        <div class="cash-dashboard">
+            <div class="cash-stat-card today-sales">
+                <div class="cash-stat-icon">
+                    <i class="fas fa-euro-sign"></i>
+                </div>
+                <div class="cash-stat-info">
+                    <h3 id="today-sales">€0.00</h3>
+                    <p>Ventas Hoy</p>
+                </div>
+            </div>
+            
+            <div class="cash-stat-card total-cash">
+                <div class="cash-stat-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="cash-stat-info">
+                    <h3 id="total-cash">€0.00</h3>
+                    <p>Efectivo en Caja</p>
+                </div>
+            </div>
+            
+            <div class="cash-stat-card credit-sales">
+                <div class="cash-stat-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <div class="cash-stat-info">
+                    <h3 id="credit-sales">€0.00</h3>
+                    <p>Ventas con Tarjeta</p>
+                </div>
+            </div>
+            
+            <div class="cash-stat-card transactions">
+                <div class="cash-stat-icon">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <div class="cash-stat-info">
+                    <h3 id="transaction-count">0</h3>
+                    <p>Transacciones Hoy</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-layout">
+            <!-- Panel izquierdo -->
+            <div class="left-panel">
+                <!-- Categorías -->
+                <div class="categories">
+                    <div class="categories-header">
+                        <h2>Categorías</h2>
+                        <div class="search-box" style="width: 200px;">
+                            <input type="text" id="product-search" placeholder="Buscar producto...">
+                        </div>
+                    </div>
+                    
+                    <div class="category-buttons">
+                        <button class="category-btn active" data-category="all">
+                            <i class="fas fa-list"></i>
+                            Todos
+                        </button>
+                        <button class="category-btn" data-category="hamburguesas">
+                            <i class="fas fa-hamburger"></i>
+                            Hamburguesas
+                        </button>
+                        <button class="category-btn" data-category="pizzas">
+                            <i class="fas fa-pizza-slice"></i>
+                            Pizzas
+                        </button>
+                        <button class="category-btn" data-category="bebidas">
+                            <i class="fas fa-wine-glass-alt"></i>
+                            Bebidas
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Productos -->
+                <div class="products">
+                    <div class="products-header">
+                        <h2>Productos</h2>
+                        <div class="products-count">
+                            <span id="products-count">0 productos</span>
+                        </div>
+                    </div>
+                    
+                    <div class="products-grid" id="products-container">
+                        <!-- Los productos se cargarán con JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Panel derecho - Resumen de venta -->
+            <div class="right-panel">
+                <div class="sale-summary">
+                    <div class="sale-header">
+                        <h3>Venta Actual</h3>
+                        <button class="cancel-sale-btn" id="clear-sale-btn" style="padding: 8px 15px; font-size: 0.9rem;">
+                            <i class="fas fa-trash"></i> Limpiar
+                        </button>
+                    </div>
+                    
+                    <div class="sale-items" id="sale-items-container">
+                        <!-- Los items de la venta se cargarán con JavaScript -->
+                        <div class="empty-cart" style="text-align: center; padding: 30px; color: var(--gray-color);">
+                            <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                            <p>No hay productos en la venta</p>
+                            <p style="font-size: 0.9rem;">Agrega productos desde el catálogo</p>
+                        </div>
+                    </div>
+                    
+                    <div class="totals">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">€0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>IVA (10%):</span>
+                            <span id="tax-amount">€0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Total:</span>
+                            <span id="total-amount">€0.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="payment-methods">
+                    <h3>Método de Pago</h3>
+                    <div class="payment-options">
+                        <button class="payment-btn cash active" data-method="cash">
+                            <i class="fas fa-money-bill-wave"></i>
+                            Efectivo
+                        </button>
+                        <button class="payment-btn card" data-method="card">
+                            <i class="fas fa-credit-card"></i>
+                            Tarjeta
+                        </button>
+                        <button class="payment-btn transfer" data-method="transfer">
+                            <i class="fas fa-mobile-alt"></i>
+                            Transferencia
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn complete-sale-btn" id="complete-sale-btn">
+                        <i class="fas fa-check-circle"></i>
+                        Completar Venta
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Transacciones recientes -->
+        <div class="recent-transactions">
+            <div class="transactions-header">
+                <h2>Transacciones Recientes</h2>
+                <button class="refresh-btn" id="refresh-transactions" style="padding: 10px 15px; font-size: 0.9rem;">
+                    <i class="fas fa-sync-alt"></i> Actualizar
+                </button>
+            </div>
+            
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>ID Venta</th>
+                        <th>Hora</th>
+                        <th>Cliente</th>
+                        <th>Método</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="transactions-body">
+                    <!-- Las transacciones se cargarán con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Botones de gestión de caja -->
+        <div class="cash-buttons">
+            <button class="cash-action-btn open-cash-btn" id="open-cash-btn">
+                <i class="fas fa-lock-open"></i>
+                <span>Abrir Caja</span>
+            </button>
+            
+            <button class="cash-action-btn close-cash-btn" id="close-cash-btn">
+                <i class="fas fa-lock"></i>
+                <span>Cerrar Caja</span>
+            </button>
+            
+            <button class="cash-action-btn reports-btn" id="reports-btn">
+                <i class="fas fa-chart-bar"></i>
+                <span>Reportes</span>
+            </button>
+            
+            <button class="cash-action-btn void-sale-btn" id="void-sale-btn">
+                <i class="fas fa-ban"></i>
+                <span>Anular Venta</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Datos de productos
+        const products = [
+            {
+                id: 1,
+                name: "Hamburguesa Clásica",
+                category: "hamburguesas",
+                price: 8.50,
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 2,
+                name: "Hamburguesa BBQ",
+                category: "hamburguesas",
+                price: 9.50,
+                image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 3,
+                name: "Hamburguesa Vegetariana",
+                category: "hamburguesas",
+                price: 8.00,
+                image: "https://images.unsplash.com/photo-1559314809-2b99056a8c4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 4,
+                name: "Pizza Margarita",
+                category: "pizzas",
+                price: 12.00,
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 5,
+                name: "Pizza Pepperoni",
+                category: "pizzas",
+                price: 13.50,
+                image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 6,
+                name: "Pizza 4 Quesos",
+                category: "pizzas",
+                price: 14.00,
+                image: "https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 7,
+                name: "Refresco 33cl",
+                category: "bebidas",
+                price: 2.50,
+                image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 8,
+                name: "Cerveza Artesanal",
+                category: "bebidas",
+                price: 4.50,
+                image: "https://images.unsplash.com/photo-1600788886242-5c96aabe3757?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 9,
+                name: "Agua Mineral",
+                category: "bebidas",
+                price: 1.80,
+                image: "https://images.unsplash.com/photo-1523362628745-0c100150b504?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 10,
+                name: "Café Americano",
+                category: "bebidas",
+                price: 2.00,
+                image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 11,
+                name: "Papas Fritas",
+                category: "acompanamientos",
+                price: 3.00,
+                image: "https://images.unsplash.com/photo-1576107232684-1279f390859f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 12,
+                name: "Aros de Cebolla",
+                category: "acompanamientos",
+                price: 4.00,
+                image: "https://images.unsplash.com/photo-1563379091339-03246963d9d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+            }
+        ];
+
+        // Datos de transacciones
+        let transactions = [
+            {
+                id: "V-1001",
+                time: "10:15 AM",
+                customer: "Juan Pérez",
+                method: "cash",
+                total: 25.50,
+                status: "completed",
+                items: [
+                    { name: "Hamburguesa Clásica", quantity: 2, price: 8.50 },
+                    { name: "Refresco", quantity: 2, price: 2.50 }
+                ]
+            },
+            {
+                id: "V-1002",
+                time: "10:30 AM",
+                customer: "María García",
+                method: "card",
+                total: 19.50,
+                status: "completed",
+                items: [
+                    { name: "Pizza Pepperoni", quantity: 1, price: 13.50 },
+                    { name: "Agua Mineral", quantity: 1, price: 1.80 },
+                    { name: "Café Americano", quantity: 1, price: 2.00 }
+                ]
+            },
+            {
+                id: "V-1003",
+                time: "10:45 AM",
+                customer: "Cliente Mostrador",
+                method: "cash",
+                total: 8.50,
+                status: "completed",
+                items: [
+                    { name: "Hamburguesa Vegetariana", quantity: 1, price: 8.00 },
+                    { name: "Papas Fritas", quantity: 1, price: 3.00 }
+                ]
+            }
+        ];
+
+        // Estado de la aplicación
+        let currentSale = [];
+        let currentCategory = 'all';
+        let currentPaymentMethod = 'cash';
+        let cashStatus = 'open'; // 'open' o 'closed'
+        let cashRegister = {
+            openingBalance: 100.00,
+            currentBalance: 100.00,
+            totalSales: 0,
+            cashSales: 0,
+            cardSales: 0,
+            transferSales: 0,
+            transactionCount: 0,
+            openedAt: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+            lastClosed: null
+        };
+
+        // Elementos del DOM
+        const productsContainer = document.getElementById('products-container');
+        const saleItemsContainer = document.getElementById('sale-items-container');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const paymentButtons = document.querySelectorAll('.payment-btn');
+        const completeSaleBtn = document.getElementById('complete-sale-btn');
+        const clearSaleBtn = document.getElementById('clear-sale-btn');
+        const productSearch = document.getElementById('product-search');
+        const subtotalElement = document.getElementById('subtotal');
+        const taxAmountElement = document.getElementById('tax-amount');
+        const totalAmountElement = document.getElementById('total-amount');
+        const productsCountElement = document.getElementById('products-count');
+        
+        // Modal de pago
+        const paymentModal = document.getElementById('payment-modal');
+        const closePaymentModal = document.getElementById('close-payment-modal');
+        const cancelPaymentBtn = document.getElementById('cancel-payment');
+        const confirmPaymentBtn = document.getElementById('confirm-payment');
+        const paymentAmountInput = document.getElementById('payment-amount');
+        const changeAmountInput = document.getElementById('change-amount');
+        const customerNameInput = document.getElementById('customer-name');
+        const modalTotalAmount = document.getElementById('modal-total-amount');
+        
+        // Modal de caja
+        const cashModal = document.getElementById('cash-modal');
+        const closeCashModal = document.getElementById('close-cash-modal');
+        const cancelCashOperationBtn = document.getElementById('cancel-cash-operation');
+        const confirmCashOperationBtn = document.getElementById('confirm-cash-operation');
+        const cashModalTitle = document.getElementById('cash-modal-title');
+        const cashModalContent = document.getElementById('cash-modal-content');
+        
+        // Botones de caja
+        const openCashBtn = document.getElementById('open-cash-btn');
+        const closeCashBtn = document.getElementById('close-cash-btn');
+        const reportsBtn = document.getElementById('reports-btn');
+        const voidSaleBtn = document.getElementById('void-sale-btn');
+        const refreshTransactionsBtn = document.getElementById('refresh-transactions');
+        
+        // Dashboard
+        const todaySalesElement = document.getElementById('today-sales');
+        const totalCashElement = document.getElementById('total-cash');
+        const creditSalesElement = document.getElementById('credit-sales');
+        const transactionCountElement = document.getElementById('transaction-count');
+        const cashStatusElement = document.getElementById('cash-status');
+        const transactionsBody = document.getElementById('transactions-body');
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            updateSaleSummary();
+            updateDashboard();
+            renderTransactions();
+            setupEventListeners();
+            updateCashStatus();
+        });
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Categorías
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentCategory = button.getAttribute('data-category');
+                    renderProducts();
+                });
+            });
+            
+            // Métodos de pago
+            paymentButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    paymentButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentPaymentMethod = button.getAttribute('data-method');
+                });
+            });
+            
+            // Búsqueda de productos
+            productSearch.addEventListener('input', (e) => {
+                renderProducts();
+            });
+            
+            // Botones de venta
+            completeSaleBtn.addEventListener('click', openPaymentModal);
+            clearSaleBtn.addEventListener('click', clearCurrentSale);
+            
+            // Modal de pago
+            closePaymentModal.addEventListener('click', closePaymentModalFunc);
+            cancelPaymentBtn.addEventListener('click', closePaymentModalFunc);
+            confirmPaymentBtn.addEventListener('click', completePayment);
+            paymentAmountInput.addEventListener('input', calculateChange);
+            
+            // Modal de caja
+            closeCashModal.addEventListener('click', closeCashModalFunc);
+            cancelCashOperationBtn.addEventListener('click', closeCashModalFunc);
+            confirmCashOperationBtn.addEventListener('click', confirmCashOperation);
+            
+            // Botones de caja
+            openCashBtn.addEventListener('click', () => openCashModal('open'));
+            closeCashBtn.addEventListener('click', () => openCashModal('close'));
+            reportsBtn.addEventListener('click', showReports);
+            voidSaleBtn.addEventListener('click', voidLastSale);
+            refreshTransactionsBtn.addEventListener('click', renderTransactions);
+            
+            // Cerrar modales al hacer clic fuera
+            window.addEventListener('click', (e) => {
+                if (e.target === paymentModal) closePaymentModalFunc();
+                if (e.target === cashModal) closeCashModalFunc();
+            });
+        }
+
+        // Renderizar productos
+        function renderProducts() {
+            // Limpiar contenedor
+            productsContainer.innerHTML = '';
+            
+            // Filtrar productos por categoría
+            let filteredProducts = products;
+            if (currentCategory !== 'all') {
+                filteredProducts = products.filter(product => product.category === currentCategory);
+            }
+            
+            // Filtrar por búsqueda
+            const searchQuery = productSearch.value.toLowerCase();
+            if (searchQuery) {
+                filteredProducts = filteredProducts.filter(product => 
+                    product.name.toLowerCase().includes(searchQuery)
+                );
+            }
+            
+            // Actualizar contador
+            productsCountElement.textContent = `${filteredProducts.length} productos`;
+            
+            // Crear tarjetas de productos
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-image" style="background-image: url('${product.image}')"></div>
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-price">€${product.price.toFixed(2)}</div>
+                    <button class="add-product-btn" data-id="${product.id}">
+                        <i class="fas fa-plus"></i> Agregar
+                    </button>
+                `;
+                
+                productsContainer.appendChild(productCard);
+            });
+            
+            // Agregar event listeners a los botones de agregar
+            document.querySelectorAll('.add-product-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.closest('.add-product-btn').getAttribute('data-id'));
+                    addProductToSale(productId);
+                });
+            });
+        }
+
+        // Agregar producto a la venta actual
+        function addProductToSale(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            // Verificar si el producto ya está en la venta
+            const existingItem = currentSale.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                currentSale.push({
+                    ...product,
+                    quantity: 1
+                });
+            }
+            
+            updateSaleSummary();
+            showNotification(`${product.name} agregado a la venta`, 'success');
+        }
+
+        // Actualizar resumen de venta
+        function updateSaleSummary() {
+            // Limpiar contenedor
+            saleItemsContainer.innerHTML = '';
+            
+            if (currentSale.length === 0) {
+                saleItemsContainer.innerHTML = `
+                    <div class="empty-cart" style="text-align: center; padding: 30px; color: var(--gray-color);">
+                        <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                        <p>No hay productos en la venta</p>
+                        <p style="font-size: 0.9rem;">Agrega productos desde el catálogo</p>
+                    </div>
+                `;
+                
+                subtotalElement.textContent = '€0.00';
+                taxAmountElement.textContent = '€0.00';
+                totalAmountElement.textContent = '€0.00';
+                return;
+            }
+            
+            // Calcular subtotal
+            const subtotal = currentSale.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const taxRate = 0.10; // 10% IVA
+            const taxAmount = subtotal * taxRate;
+            const total = subtotal + taxAmount;
+            
+            // Actualizar totales
+            subtotalElement.textContent = `€${subtotal.toFixed(2)}`;
+            taxAmountElement.textContent = `€${taxAmount.toFixed(2)}`;
+            totalAmountElement.textContent = `€${total.toFixed(2)}`;
+            
+            // Crear items de venta
+            currentSale.forEach(item => {
+                const saleItem = document.createElement('div');
+                saleItem.className = 'sale-item';
+                saleItem.innerHTML = `
+                    <div class="item-info">
+                        <div class="item-quantity-controls">
+                            <button class="quantity-btn decrease-item" data-id="${item.id}">-</button>
+                            <div class="item-quantity">${item.quantity}</div>
+                            <button class="quantity-btn increase-item" data-id="${item.id}">+</button>
+                        </div>
+                        <div class="item-name">${item.name}</div>
+                    </div>
+                    <div class="item-total">€${(item.price * item.quantity).toFixed(2)}</div>
+                    <button class="remove-item" data-id="${item.id}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                saleItemsContainer.appendChild(saleItem);
+            });
+            
+            // Agregar event listeners a los controles de cantidad
+            document.querySelectorAll('.decrease-item').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.closest('button').getAttribute('data-id'));
+                    updateProductQuantity(productId, -1);
+                });
+            });
+            
+            document.querySelectorAll('.increase-item').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.closest('button').getAttribute('data-id'));
+                    updateProductQuantity(productId, 1);
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.closest('button').getAttribute('data-id'));
+                    removeProductFromSale(productId);
+                });
+            });
+        }
+
+        // Actualizar cantidad de producto
+        function updateProductQuantity(productId, change) {
+            const item = currentSale.find(item => item.id === productId);
+            if (!item) return;
+            
+            item.quantity += change;
+            
+            // Si la cantidad es 0 o menos, eliminar el producto
+            if (item.quantity <= 0) {
+                removeProductFromSale(productId);
+            } else {
+                updateSaleSummary();
+            }
+        }
+
+        // Eliminar producto de la venta
+        function removeProductFromSale(productId) {
+            const product = products.find(p => p.id === productId);
+            currentSale = currentSale.filter(item => item.id !== productId);
+            updateSaleSummary();
+            
+            if (product) {
+                showNotification(`${product.name} eliminado de la venta`, 'warning');
+            }
+        }
+
+        // Limpiar venta actual
+        function clearCurrentSale() {
+            if (currentSale.length === 0) return;
+            
+            if (confirm('¿Estás seguro de que deseas limpiar la venta actual?')) {
+                currentSale = [];
+                updateSaleSummary();
+                showNotification('Venta limpiada correctamente', 'info');
+            }
+        }
+
+        // Abrir modal de pago
+        function openPaymentModal() {
+            if (currentSale.length === 0) {
+                showNotification('Agrega productos a la venta primero', 'warning');
+                return;
+            }
+            
+            if (cashStatus === 'closed') {
+                showNotification('La caja está cerrada. Ábrela para realizar ventas.', 'warning');
+                return;
+            }
+            
+            // Calcular total
+            const subtotal = currentSale.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const taxAmount = subtotal * 0.10;
+            const total = subtotal + taxAmount;
+            
+            // Actualizar modal
+            modalTotalAmount.textContent = `€${total.toFixed(2)}`;
+            paymentAmountInput.value = '';
+            changeAmountInput.value = '0.00';
+            customerNameInput.value = '';
+            
+            // Mostrar modal
+            paymentModal.classList.add('active');
+            paymentAmountInput.focus();
+        }
+
+        // Cerrar modal de pago
+        function closePaymentModalFunc() {
+            paymentModal.classList.remove('active');
+        }
+
+        // Calcular cambio
+        function calculateChange() {
+            const total = parseFloat(modalTotalAmount.textContent.replace('€', ''));
+            const payment = parseFloat(paymentAmountInput.value) || 0;
+            const change = payment - total;
+            
+            if (change >= 0) {
+                changeAmountInput.value = change.toFixed(2);
+            } else {
+                changeAmountInput.value = '0.00';
+            }
+        }
+
+        // Completar pago
+        function completePayment() {
+            const total = parseFloat(modalTotalAmount.textContent.replace('€', ''));
+            const payment = parseFloat(paymentAmountInput.value) || 0;
+            
+            if (payment < total && currentPaymentMethod === 'cash') {
+                showNotification('La cantidad recibida es menor al total', 'danger');
+                return;
+            }
+            
+            // Generar ID de venta
+            const lastTransactionId = parseInt(transactions[transactions.length - 1]?.id?.split('-')[1] || 1000);
+            const newId = `V-${lastTransactionId + 1}`;
+            
+            // Hora actual
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-ES', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            
+            // Cliente
+            const customer = customerNameInput.value || 'Cliente Mostrador';
+            
+            // Crear transacción
+            const transaction = {
+                id: newId,
+                time: timeString,
+                customer: customer,
+                method: currentPaymentMethod,
+                total: total,
+                status: 'completed',
+                items: [...currentSale]
+            };
+            
+            // Agregar a transacciones
+            transactions.unshift(transaction);
+            
+            // Actualizar caja
+            updateCashRegister(transaction);
+            
+            // Mostrar ticket
+            printReceipt(transaction);
+            
+            // Limpiar venta actual
+            currentSale = [];
+            updateSaleSummary();
+            
+            // Cerrar modal
+            closePaymentModalFunc();
+            
+            // Actualizar UI
+            renderTransactions();
+            updateDashboard();
+            
+            // Mostrar confirmación
+            showNotification(`Venta ${newId} completada correctamente`, 'success');
+        }
+
+        // Actualizar caja registradora
+        function updateCashRegister(transaction) {
+            cashRegister.transactionCount++;
+            cashRegister.totalSales += transaction.total;
+            
+            switch(transaction.method) {
+                case 'cash':
+                    cashRegister.cashSales += transaction.total;
+                    cashRegister.currentBalance += transaction.total;
+                    break;
+                case 'card':
+                    cashRegister.cardSales += transaction.total;
+                    break;
+                case 'transfer':
+                    cashRegister.transferSales += transaction.total;
+                    break;
+            }
+        }
+
+        // Imprimir ticket (simulado)
+        function printReceipt(transaction) {
+            // En un sistema real, aquí se enviaría a una impresora de tickets
+            console.log('=== TICKET DE VENTA ===');
+            console.log(`ID: ${transaction.id}`);
+            console.log(`Hora: ${transaction.time}`);
+            console.log(`Cliente: ${transaction.customer}`);
+            console.log(`Método: ${getPaymentMethodText(transaction.method)}`);
+            console.log('------------------------');
+            
+            transaction.items.forEach(item => {
+                console.log(`${item.quantity}x ${item.name} - €${(item.price * item.quantity).toFixed(2)}`);
+            });
+            
+            console.log('------------------------');
+            console.log(`Total: €${transaction.total.toFixed(2)}`);
+            console.log('=== GRACIAS POR SU COMPRA ===');
+            
+            // Mostrar ticket en pantalla (para demo)
+            showReceiptModal(transaction);
+        }
+
+        // Mostrar ticket en modal (para demo)
+        function showReceiptModal(transaction) {
+            const receiptItems = transaction.items.map(item => 
+                `<div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>${item.quantity}x ${item.name}</span>
+                    <span>€${(item.price * item.quantity).toFixed(2)}</span>
+                </div>`
+            ).join('');
+            
+            const receiptHTML = `
+                <div style="text-align: center; font-family: monospace;">
+                    <h3 style="margin-bottom: 10px;">RÁPIDO Y SABROSO</h3>
+                    <p>Calle Comida 123, Centro</p>
+                    <p>Tel: 912 345 678</p>
+                    <hr style="margin: 15px 0;">
+                    <p><strong>Ticket: ${transaction.id}</strong></p>
+                    <p>Fecha: ${new Date().toLocaleDateString('es-ES')}</p>
+                    <p>Hora: ${transaction.time}</p>
+                    <p>Cajero: ${document.getElementById('cashier-name').textContent}</p>
+                    <hr style="margin: 15px 0;">
+                    ${receiptItems}
+                    <hr style="margin: 15px 0;">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold;">
+                        <span>TOTAL:</span>
+                        <span>€${transaction.total.toFixed(2)}</span>
+                    </div>
+                    <p>Método: ${getPaymentMethodText(transaction.method)}</p>
+                    <hr style="margin: 15px 0;">
+                    <p>¡GRACIAS POR SU VISITA!</p>
+                    <p>Vuelva pronto</p>
+                </div>
+            `;
+            
+            alert(`Ticket generado para ${transaction.id}\n\n${receiptHTML.replace(/<[^>]*>/g, '')}`);
+        }
+
+        // Obtener texto del método de pago
+        function getPaymentMethodText(method) {
+            switch(method) {
+                case 'cash': return 'EFECTIVO';
+                case 'card': return 'TARJETA';
+                case 'transfer': return 'TRANSFERENCIA';
+                default: return 'OTRO';
+            }
+        }
+
+        // Actualizar dashboard
+        function updateDashboard() {
+            todaySalesElement.textContent = `€${cashRegister.totalSales.toFixed(2)}`;
+            totalCashElement.textContent = `€${cashRegister.currentBalance.toFixed(2)}`;
+            creditSalesElement.textContent = `€${(cashRegister.cardSales + cashRegister.transferSales).toFixed(2)}`;
+            transactionCountElement.textContent = cashRegister.transactionCount;
+        }
+
+        // Renderizar transacciones
+        function renderTransactions() {
+            // Limpiar tabla
+            transactionsBody.innerHTML = '';
+            
+            // Mostrar máximo 10 transacciones
+            const recentTransactions = transactions.slice(0, 10);
+            
+            if (recentTransactions.length === 0) {
+                transactionsBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 30px; color: var(--gray-color);">
+                            No hay transacciones registradas
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Crear filas de tabla
+            recentTransactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.id}</td>
+                    <td>${transaction.time}</td>
+                    <td>${transaction.customer}</td>
+                    <td>${getPaymentMethodText(transaction.method)}</td>
+                    <td>€${transaction.total.toFixed(2)}</td>
+                    <td>
+                        <span class="transaction-status status-${transaction.status}">
+                            ${transaction.status === 'completed' ? 'COMPLETADA' : 
+                              transaction.status === 'pending' ? 'PENDIENTE' : 'ANULADA'}
+                        </span>
+                    </td>
+                `;
+                transactionsBody.appendChild(row);
+            });
+        }
+
+        // Actualizar estado de la caja
+        function updateCashStatus() {
+            if (cashStatus === 'open') {
+                cashStatusElement.textContent = 'Caja Abierta';
+                openCashBtn.disabled = true;
+                closeCashBtn.disabled = false;
+                completeSaleBtn.disabled = false;
+            } else {
+                cashStatusElement.textContent = 'Caja Cerrada';
+                openCashBtn.disabled = false;
+                closeCashBtn.disabled = true;
+                completeSaleBtn.disabled = true;
+            }
+        }
+
+        // Abrir modal de caja
+        function openCashModal(operation) {
+            if (operation === 'open') {
+                cashModalTitle.textContent = 'Abrir Caja';
+                cashModalContent.innerHTML = `
+                    <div class="form-group">
+                        <label for="opening-balance">Saldo Inicial en Efectivo</label>
+                        <input type="number" id="opening-balance" step="0.01" value="100.00" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="cashier">Nombre del Cajero</label>
+                        <input type="text" id="cashier-name-input" value="${document.getElementById('cashier-name').textContent}">
+                    </div>
+                `;
+            } else {
+                cashModalTitle.textContent = 'Cerrar Caja';
+                
+                // Calcular total esperado
+                const expectedCash = cashRegister.openingBalance + cashRegister.cashSales;
+                const difference = cashRegister.currentBalance - expectedCash;
+                
+                cashModalContent.innerHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Resumen de Cierre</strong></p>
+                        <div style="background-color: var(--light-color); padding: 15px; border-radius: var(--border-radius);">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Saldo Inicial:</span>
+                                <span>€${cashRegister.openingBalance.toFixed(2)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Ventas en Efectivo:</span>
+                                <span>€${cashRegister.cashSales.toFixed(2)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: bold;">
+                                <span>Total Esperado:</span>
+                                <span>€${expectedCash.toFixed(2)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Saldo Actual:</span>
+                                <span>€${cashRegister.currentBalance.toFixed(2)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-weight: bold; color: ${difference >= 0 ? 'var(--success-color)' : 'var(--danger-color)'};">
+                                <span>Diferencia:</span>
+                                <span>${difference >= 0 ? '+' : ''}€${difference.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="closing-balance">Saldo Final en Efectivo</label>
+                        <input type="number" id="closing-balance" step="0.01" value="${cashRegister.currentBalance.toFixed(2)}" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="closing-notes">Notas de Cierre (Opcional)</label>
+                        <textarea id="closing-notes" rows="3" placeholder="Observaciones sobre el cierre..."></textarea>
+                    </div>
+                `;
+            }
+            
+            cashModal.classList.add('active');
+        }
+
+        // Cerrar modal de caja
+        function closeCashModalFunc() {
+            cashModal.classList.remove('active');
+        }
+
+        // Confirmar operación de caja
+        function confirmCashOperation() {
+            if (cashModalTitle.textContent === 'Abrir Caja') {
+                // Abrir caja
+                const openingBalance = parseFloat(document.getElementById('opening-balance').value) || 0;
+                const cashierName = document.getElementById('cashier-name-input').value;
+                
+                cashRegister.openingBalance = openingBalance;
+                cashRegister.currentBalance = openingBalance;
+                cashRegister.totalSales = 0;
+                cashRegister.cashSales = 0;
+                cashRegister.cardSales = 0;
+                cashRegister.transferSales = 0;
+                cashRegister.transactionCount = 0;
+                cashRegister.openedAt = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                
+                document.getElementById('cashier-name').textContent = cashierName;
+                cashStatus = 'open';
+                
+                showNotification('Caja abierta correctamente', 'success');
+            } else {
+                // Cerrar caja
+                const closingBalance = parseFloat(document.getElementById('closing-balance').value) || 0;
+                const closingNotes = document.getElementById('closing-notes')?.value || '';
+                
+                cashRegister.currentBalance = closingBalance;
+                cashRegister.lastClosed = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                cashStatus = 'closed';
+                
+                // Guardar reporte de cierre
+                saveClosingReport(closingNotes);
+                showNotification('Caja cerrada correctamente', 'success');
+            }
+            
+            updateCashStatus();
+            updateDashboard();
+            closeCashModalFunc();
+        }
+
+        // Guardar reporte de cierre
+        function saveClosingReport(notes) {
+            const report = {
+                date: new Date().toLocaleDateString('es-ES'),
+                openedAt: cashRegister.openedAt,
+                closedAt: cashRegister.lastClosed,
+                openingBalance: cashRegister.openingBalance,
+                closingBalance: cashRegister.currentBalance,
+                totalSales: cashRegister.totalSales,
+                cashSales: cashRegister.cashSales,
+                cardSales: cashRegister.cardSales,
+                transferSales: cashRegister.transferSales,
+                transactionCount: cashRegister.transactionCount,
+                cashier: document.getElementById('cashier-name').textContent,
+                notes: notes
+            };
+            
+            console.log('Reporte de cierre guardado:', report);
+            // En un sistema real, aquí se enviaría a una base de datos o se guardaría localmente
+        }
+
+        // Mostrar reportes
+        function showReports() {
+            alert('En un sistema real, aquí se mostrarían reportes detallados de ventas, gráficos, etc.');
+            // Para una implementación completa, se podría crear otra ventana modal con gráficos y estadísticas
+        }
+
+        // Anular última venta
+        function voidLastSale() {
+            if (transactions.length === 0) {
+                showNotification('No hay ventas para anular', 'warning');
+                return;
+            }
+            
+            const lastTransaction = transactions[0];
+            
+            if (confirm(`¿Estás seguro de que deseas anular la venta ${lastTransaction.id} por €${lastTransaction.total.toFixed(2)}?`)) {
+                // Revertir efectos en caja
+                cashRegister.transactionCount--;
+                cashRegister.totalSales -= lastTransaction.total;
+                
+                switch(lastTransaction.method) {
+                    case 'cash':
+                        cashRegister.cashSales -= lastTransaction.total;
+                        cashRegister.currentBalance -= lastTransaction.total;
+                        break;
+                    case 'card':
+                        cashRegister.cardSales -= lastTransaction.total;
+                        break;
+                    case 'transfer':
+                        cashRegister.transferSales -= lastTransaction.total;
+                        break;
+                }
+                
+                // Cambiar estado de la transacción
+                lastTransaction.status = 'cancelled';
+                
+                // Actualizar UI
+                updateDashboard();
+                renderTransactions();
+                
+                showNotification(`Venta ${lastTransaction.id} anulada correctamente`, 'info');
+            }
+        }
+
+        // Mostrar notificación
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background-color: ${getNotificationColor(type)};
+                color: white;
+                padding: 15px 25px;
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow);
+                z-index: 1000;
+                animation: slideInRight 0.5s ease-out;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            `;
+            
+            const icon = type === 'success' ? 'fa-check-circle' :
+                        type === 'warning' ? 'fa-exclamation-triangle' :
+                        type === 'danger' ? 'fa-times-circle' : 'fa-info-circle';
+            
+            notification.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remover notificación después de 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.5s ease-out';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 500);
+            }, 3000);
+            
+            // Agregar animaciones CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOutRight {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Obtener color de notificación
+        function getNotificationColor(type) {
+            switch(type) {
+                case 'success': return 'var(--success-color)';
+                case 'warning': return 'var(--warning-color)';
+                case 'danger': return 'var(--danger-color)';
+                default: return 'var(--secondary-color)';
+            }
+        }
+    </script>
+</body>
+</html>
