@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rápido y Sabroso | Comida al Paso</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6b35;
+            --secondary-color: #f4a261;
+            --dark-color: #2a2a2a;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+            --success-color: #28a745;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #fff;
+            padding-bottom: 80px; /* Espacio para el menú inferior */
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--primary-color);
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0;
+            color: var(--dark-color);
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-icon i {
+            font-size: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.8rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Menú Inferior (Mobile Navigation) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+        }
+
+        .bottom-nav-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray-color);
+            transition: color 0.3s;
+            flex: 1;
+        }
+
+        .nav-item.active,
+        .nav-item:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #e55a2b;
+            transform: translateY(-3px);
+        }
+
+        /* Secciones */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 4px;
+            background-color: var(--primary-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Menú */
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .category-btn {
+            background-color: var(--light-color);
+            border: 2px solid #ddd;
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .category-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-item {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .item-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .item-content {
+            padding: 20px;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .item-name {
+            font-size: 1.3rem;
+            margin-bottom: 0;
+        }
+
+        .item-price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .item-description {
+            color: var(--gray-color);
+            margin-bottom: 15px;
+        }
+
+        .item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .add-to-cart {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background-color: #e68948;
+        }
+
+        /* Carrito */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            justify-content: flex-end;
+        }
+
+        .cart-overlay.active {
+            display: flex;
+        }
+
+        .cart-sidebar {
+            width: 100%;
+            max-width: 450px;
+            height: 100%;
+            background-color: white;
+            padding: 30px;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.3s;
+        }
+
+        .cart-overlay.active .cart-sidebar {
+            transform: translateX(0);
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-color);
+        }
+
+        .cart-items {
+            margin-bottom: 30px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info h4 {
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--light-color);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background-color: var(--success-color);
+        }
+
+        .checkout-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Sobre Nosotros */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-image {
+            flex: 1;
+            height: 400px;
+            background-image: url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+        }
+
+        /* Contacto */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .info-card {
+            text-align: center;
+            padding: 30px 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .info-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .footer-links h3, .footer-contact h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .about-image {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .cart-sidebar {
+                max-width: 100%;
+            }
+            
+            /* Mostrar menú inferior en móviles */
+            .bottom-nav {
+                display: block;
+            }
+            
+            /* Ocultar navegación principal en móviles */
+            header nav {
+                display: none;
+            }
+            
+            /* Ajustar padding del body para el menú inferior */
+            body {
+                padding-bottom: 80px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .menu-categories {
+                gap: 10px;
+            }
+            
+            .category-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero {
+                padding: 70px 0;
+            }
+            
+            section {
+                padding: 60px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-hamburger"></i>
+                <h1>Rápido y <span>Sabroso</span></h1>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#menu">Menú</a></li>
+                    <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+            
+            <div class="cart-icon" id="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <div class="cart-count">0</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="container">
+            <h2>Comida Rápida, Sabor Inolvidable</h2>
+            <p>Disfruta de los mejores platos preparados al instante con ingredientes frescos y de calidad. ¡Hamburguesas, pizzas, sandwiches y mucho más!</p>
+            <a href="#menu" class="btn">Ver Menú</a>
+        </div>
+    </section>
+
+    <!-- Menú -->
+    <section id="menu">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestro Menú</h2>
+                <p>Deliciosas opciones para todos los gustos</p>
+            </div>
+            
+            <div class="menu-categories">
+                <button class="category-btn active" data-category="todos">Todos</button>
+                <button class="category-btn" data-category="hamburguesas">Hamburguesas</button>
+                <button class="category-btn" data-category="pizzas">Pizzas</button>
+                <button class="category-btn" data-category="sandwiches">Sandwiches</button>
+                <button class="category-btn" data-category="bebidas">Bebidas</button>
+            </div>
+            
+            <div class="menu-items" id="menu-items">
+                <!-- Los elementos del menú se cargarán con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Nosotros -->
+    <section id="sobre-nosotros">
+        <div class="container">
+            <div class="section-title">
+                <h2>Sobre Nosotros</h2>
+                <p>Conoce nuestra historia y pasión por la comida</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <p>En <strong>Rápido y Sabroso</strong> llevamos más de 10 años sirviendo la mejor comida rápida de la ciudad. Nuestra filosofía es simple: ingredientes frescos, preparación rápida y sabor excepcional.</p>
+                    <p>Cada día seleccionamos cuidadosamente los productos que utilizamos en nuestras recetas, combinando técnicas tradicionales con toques innovadores que hacen de cada plato una experiencia única.</p>
+                    <p>Nuestro equipo está formado por apasionados de la gastronomía que trabajan con dedicación para ofrecerte el mejor servicio y la calidad que te mereces.</p>
+                </div>
+                <div class="about-image"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contacto</h2>
+                <p>Visítanos o contáctanos para hacer tu pedido</p>
+            </div>
+            
+            <div class="contact-info">
+                <div class="info-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Dirección</h3>
+                    <p>Calle Comida 123, Centro</p>
+                    <p>Ciudad Gourmet</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Horario</h3>
+                    <p>Lunes a Viernes: 10:00 - 22:00</p>
+                    <p>Sábados y Domingos: 11:00 - 23:00</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-phone"></i>
+                    <h3>Teléfono</h3>
+                    <p>+34 912 345 678</p>
+                    <p>Pedidos por teléfono</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="tel:+34912345678" class="btn">Llamar para Pedir</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Rápido y Sabroso</h2>
+                    <p>La mejor comida rápida con ingredientes frescos y sabor auténtico.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#menu">Menú</a></li>
+                        <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Calle Comida 123, Centro</p>
+                    <p><i class="fas fa-phone"></i> +34 912 345 678</p>
+                    <p><i class="fas fa-envelope"></i> info@rapidoysabroso.com</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Rápido y Sabroso. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Menú Inferior (Mobile Navigation) -->
+    <nav class="bottom-nav" id="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="#inicio" class="nav-item active" id="nav-home">
+                <div class="nav-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="nav-label">Inicio</div>
+            </a>
+            
+            <a href="#menu" class="nav-item" id="nav-menu">
+                <div class="nav-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <div class="nav-label">Menú</div>
+            </a>
+            
+            <a href="#cart-overlay" class="nav-item" id="nav-cart">
+                <div class="nav-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="nav-label">Carrito</div>
+            </a>
+            
+            <a href="#sobre-nosotros" class="nav-item" id="nav-about">
+                <div class="nav-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="nav-label">Nosotros</div>
+            </a>
+            
+            <a href="#contacto" class="nav-item" id="nav-contact">
+                <div class="nav-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <div class="nav-label">Contacto</div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Carrito de Compras -->
+    <div class="cart-overlay" id="cart-overlay">
+        <div class="cart-sidebar">
+            <div class="cart-header">
+                <h3>Tu Pedido</h3>
+                <button class="close-cart" id="close-cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="cart-items" id="cart-items">
+                <!-- Los items del carrito se cargarán con JavaScript -->
+                <div id="empty-cart-message" style="text-align: center; padding: 30px; color: var(--gray-color);">
+                    <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <p>Tu carrito está vacío</p>
+                </div>
+            </div>
+            
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-price">€0.00</span>
+            </div>
+            
+            <button class="btn checkout-btn" id="checkout-btn">Finalizar Pedido</button>
+        </div>
+    </div>
+
+    <script>
+        // Datos del menú
+        const menuItems = [
+            {
+                id: 1,
+                name: "Hamburguesa Clásica",
+                category: "hamburguesas",
+                price: 8.50,
+                description: "Carne de res, lechuga, tomate, cebolla y salsa especial",
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1398&q=80"
+            },
+            {
+                id: 2,
+                name: "Hamburguesa BBQ",
+                category: "hamburguesas",
+                price: 9.50,
+                description: "Carne de res, bacon, cebolla crujiente y salsa barbacoa",
+                image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1415&q=80"
+            },
+            {
+                id: 3,
+                name: "Pizza Margarita",
+                category: "pizzas",
+                price: 12.00,
+                description: "Salsa de tomate, mozzarella fresca y albahaca",
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1381&q=80"
+            },
+            {
+                id: 4,
+                name: "Pizza Pepperoni",
+                category: "pizzas",
+                price: 13.50,
+                description: "Salsa de tomate, mozzarella y pepperoni picante",
+                image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80"
+            },
+            {
+                id: 5,
+                name: "Sándwich de Pollo",
+                category: "sandwiches",
+                price: 7.50,
+                description: "Pechuga de pollo a la plancha, lechuga y mayonesa",
+                image: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1473&q=80"
+            },
+            {
+                id: 6,
+                name: "Sándwich Veggie",
+                category: "sandwiches",
+                price: 7.00,
+                description: "Verduras frescas, aguacate y hummus",
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80"
+            },
+            {
+                id: 7,
+                name: "Refresco",
+                category: "bebidas",
+                price: 2.50,
+                description: "Refresco de cola, naranja o limón",
+                image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+            },
+            {
+                id: 8,
+                name: "Cerveza Artesanal",
+                category: "bebidas",
+                price: 4.50,
+                description: "Cerveza rubia artesanal de barril",
+                image: "https://images.unsplash.com/photo-1600788886242-5c96aabe3757?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
+            }
+        ];
+
+        // Estado del carrito
+        let cart = [];
+        
+        // Elementos del DOM
+        const menuItemsContainer = document.getElementById('menu-items');
+        const cartIcon = document.getElementById('cart-icon');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const closeCartBtn = document.getElementById('close-cart');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotalPrice = document.getElementById('cart-total-price');
+        const cartCount = document.querySelector('.cart-count');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        
+        // Elementos del menú inferior
+        const bottomNav = document.getElementById('bottom-nav');
+        const navItems = document.querySelectorAll('.nav-item');
+        const navCart = document.getElementById('nav-cart');
+
+        // Inicializar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMenuItems('todos');
+            setupEventListeners();
+            updateCart();
+            updateBottomNavOnScroll();
+            
+            // Mostrar/ocultar menú inferior según el tamaño de pantalla
+            checkScreenSize();
+            window.addEventListener('resize', checkScreenSize);
+        });
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Carrito
+            cartIcon.addEventListener('click', openCart);
+            closeCartBtn.addEventListener('click', closeCart);
+            checkoutBtn.addEventListener('click', checkout);
+            
+            // Menú inferior - carrito
+            navCart.addEventListener('click', (e) => {
+                e.preventDefault();
+                openCart();
+            });
+            
+            // Menú inferior - navegación
+            navItems.forEach(item => {
+                if (item !== navCart) { // Ya manejamos el carrito separadamente
+                    item.addEventListener('click', (e) => {
+                        // Actualizar estado activo
+                        navItems.forEach(nav => nav.classList.remove('active'));
+                        item.classList.add('active');
+                        
+                        // Cerrar carrito si está abierto
+                        closeCart();
+                    });
+                }
+            });
+            
+            // Filtrado de categorías
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remover clase active de todos los botones
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    // Agregar clase active al botón clickeado
+                    button.classList.add('active');
+                    // Filtrar menú por categoría
+                    const category = button.getAttribute('data-category');
+                    renderMenuItems(category);
+                });
+            });
+            
+            // Cerrar carrito al hacer clic fuera
+            cartOverlay.addEventListener('click', (e) => {
+                if (e.target === cartOverlay) {
+                    closeCart();
+                }
+            });
+            
+            // Actualizar menú inferior al hacer scroll
+            window.addEventListener('scroll', updateBottomNavOnScroll);
+        }
+
+        // Renderizar items del menú
+        function renderMenuItems(category) {
+            // Limpiar contenedor
+            menuItemsContainer.innerHTML = '';
+            
+            // Filtrar items por categoría
+            let filteredItems = menuItems;
+            if (category !== 'todos') {
+                filteredItems = menuItems.filter(item => item.category === category);
+            }
+            
+            // Crear elementos del menú
+            filteredItems.forEach(item => {
+                const menuItemElement = document.createElement('div');
+                menuItemElement.className = 'menu-item';
+                menuItemElement.innerHTML = `
+                    <div class="item-image" style="background-image: url('${item.image}')"></div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <h3 class="item-name">${item.name}</h3>
+                            <div class="item-price">€${item.price.toFixed(2)}</div>
+                        </div>
+                        <p class="item-description">${item.description}</p>
+                        <div class="item-footer">
+                            <button class="add-to-cart" data-id="${item.id}">Añadir al Carrito</button>
+                        </div>
+                    </div>
+                `;
+                
+                menuItemsContainer.appendChild(menuItemElement);
+            });
+            
+            // Agregar event listeners a los botones de añadir al carrito
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = parseInt(e.target.getAttribute('data-id'));
+                    addToCart(itemId);
+                });
+            });
+        }
+
+        // Funciones del carrito
+        function addToCart(itemId) {
+            const item = menuItems.find(item => item.id === itemId);
+            
+            // Verificar si el item ya está en el carrito
+            const existingItem = cart.find(cartItem => cartItem.id === itemId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...item,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+            showNotification(`${item.name} añadido al carrito`);
+        }
+
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            updateCart();
+        }
+
+        function updateQuantity(itemId, newQuantity) {
+            if (newQuantity < 1) {
+                removeFromCart(itemId);
+                return;
+            }
+            
+            const item = cart.find(item => item.id === itemId);
+            if (item) {
+                item.quantity = newQuantity;
+            }
+            
+            updateCart();
+        }
+
+        function updateCart() {
+            // Actualizar contador del carrito
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            // Actualizar contador en el menú inferior
+            const navCartCount = navCart.querySelector('.nav-icon');
+            let countBadge = navCartCount.querySelector('.nav-cart-count');
+            
+            if (totalItems > 0) {
+                if (!countBadge) {
+                    countBadge = document.createElement('span');
+                    countBadge.className = 'nav-cart-count';
+                    countBadge.style.cssText = `
+                        position: absolute;
+                        top: -5px;
+                        right: -5px;
+                        background-color: var(--primary-color);
+                        color: white;
+                        font-size: 0.6rem;
+                        width: 16px;
+                        height: 16px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    `;
+                    navCartCount.style.position = 'relative';
+                    navCartCount.appendChild(countBadge);
+                }
+                countBadge.textContent = totalItems;
+            } else if (countBadge) {
+                countBadge.remove();
+            }
+            
+            // Actualizar lista de items del carrito
+            cartItemsContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                cartItemsContainer.appendChild(emptyCartMessage);
+                cartTotalPrice.textContent = '€0.00';
+                return;
+            }
+            
+            emptyCartMessage.style.display = 'none';
+            
+            // Renderizar items del carrito
+            cart.forEach(item => {
+                const cartItemElement = document.createElement('div');
+                cartItemElement.className = 'cart-item';
+                cartItemElement.innerHTML = `
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <div class="cart-item-price">€${item.price.toFixed(2)}</div>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn minus" data-id="${item.id}">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="quantity-btn plus" data-id="${item.id}">+</button>
+                        <button class="quantity-btn remove" data-id="${item.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                cartItemsContainer.appendChild(cartItemElement);
+            });
+            
+            // Agregar event listeners a los botones de cantidad
+            document.querySelectorAll('.quantity-btn.minus').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = parseInt(e.target.getAttribute('data-id'));
+                    const item = cart.find(item => item.id === itemId);
+                    updateQuantity(itemId, item.quantity - 1);
+                });
+            });
+            
+            document.querySelectorAll('.quantity-btn.plus').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = parseInt(e.target.getAttribute('data-id'));
+                    const item = cart.find(item => item.id === itemId);
+                    updateQuantity(itemId, item.quantity + 1);
+                });
+            });
+            
+            document.querySelectorAll('.quantity-btn.remove').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const itemId = parseInt(e.target.closest('.quantity-btn').getAttribute('data-id'));
+                    removeFromCart(itemId);
+                });
+            });
+            
+            // Calcular y actualizar el total
+            const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            cartTotalPrice.textContent = `€${totalPrice.toFixed(2)}`;
+        }
+
+        function openCart() {
+            cartOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Evitar scroll del body
+        }
+
+        function closeCart() {
+            cartOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restaurar scroll del body
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío. Añade algunos productos antes de finalizar el pedido.');
+                return;
+            }
+            
+            const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const orderDetails = cart.map(item => 
+                `${item.name} x${item.quantity} - €${(item.price * item.quantity).toFixed(2)}`
+            ).join('\n');
+            
+            alert(`Pedido realizado con éxito!\n\n${orderDetails}\n\nTotal: €${totalPrice.toFixed(2)}\n\nGracias por tu compra. Tu pedido estará listo en 15-20 minutos.`);
+            
+            // Vaciar carrito después de finalizar el pedido
+            cart = [];
+            updateCart();
+            closeCart();
+        }
+
+        function showNotification(message) {
+            // Crear elemento de notificación
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 90px; /* Arriba del menú inferior */
+                right: 20px;
+                background-color: var(--success-color);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 5px;
+                box-shadow: var(--shadow);
+                z-index: 3000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Remover notificación después de 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+            
+            // Agregar animaciones CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Actualizar menú inferior según la sección visible
+        function updateBottomNavOnScroll() {
+            const sections = document.querySelectorAll('section, .hero');
+            const scrollPosition = window.scrollY + 100;
+            
+            let currentSectionId = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    currentSectionId = section.id || 'inicio';
+                }
+            });
+            
+            // Actualizar el elemento activo en el menú inferior
+            navItems.forEach(item => {
+                const href = item.getAttribute('href');
+                const targetId = href.replace('#', '');
+                
+                if (targetId === currentSectionId || 
+                    (targetId === 'inicio' && currentSectionId === '')) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // Verificar tamaño de pantalla para mostrar/ocultar menú inferior
+        function checkScreenSize() {
+            if (window.innerWidth <= 768) {
+                bottomNav.style.display = 'block';
+                document.body.style.paddingBottom = '80px';
+            } else {
+                bottomNav.style.display = 'none';
+                document.body.style.paddingBottom = '0';
+            }
+        }
+    </script>
+</body>
+</html>
